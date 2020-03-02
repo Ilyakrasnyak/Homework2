@@ -9,7 +9,7 @@ import sorter
 if len(sys.argv) != 4:
     raise LaunchParametersError()
 
-MAX_SIZE = sys.argv[1]
+MAX_SIZE = int(sys.argv[1])
 INPUT_FILE = sys.argv[2]
 OUTPUT_FILE = sys.argv[3]
 
