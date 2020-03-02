@@ -4,7 +4,6 @@ import logging
 
 from errors import MemoryStarvationError
 
-
 logging.basicConfig(
     level=logging.DEBUG,
     format='%(message)s'
@@ -25,29 +24,39 @@ class Sorter:
         logging.debug('{} file is being processed'.format(file_location))
         return file_location
 
-    def create_temporary_folder(self):
-        path = self.current_directory + '\\' + 'temporary_folder'
-        logging.debug('Create temporary folder {}'.format(path))
-        os.mkdir(path)
+    # def create_temporary_folder(self):
+    #     path = self.current_directory + '\\' + 'temporary_folder'
+    #     logging.debug('Create temporary folder {}'.format(path))
+    #     os.mkdir(path)
 
     def shatter_file(self):
         input_file_location = self.get_file_location(self, self.input_file)
         with open(input_file_location) as input_file:
             trapped_memory_sum = 0
+            temp_text_block = ''
+            temp_block_number = 0
             for line in input_file:
                 logging.debug('Handling line - {}'.format(line))
                 trapped_memory_line = sys.getsizeof(line)
-                if trapped_memory_line > self.max_size :
+
+                if trapped_memory_line > self.max_size:
                     raise MemoryStarvationError()
 
+                if trapped_memory_sum + trapped_memory_line < self.max_size:
+                    temp_text_block += line
+                    continue
 
+                else:
+                    temp_block_number += 1
+                    temp_block_name = 'temporary_file_' + str(temp_block_number)
+                    with open(temp_block_name, 'w') as t :
+                        t.write(temp_text_block)
+                    temp_text_block = ''
+                    continue
 
-
-
-
-
-
-
+            temp_block_name = 'temporary_file_' + str(temp_block_number)
+            with open(temp_block_name, 'w') as t:
+                t.write(temp_text_block)
 
 
 
