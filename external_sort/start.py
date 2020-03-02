@@ -3,7 +3,7 @@ import sys
 
 # internal imports
 from errors import LaunchParametersError
-from sorter import Sorter
+import sorter
 
 
 if len(sys.argv) != 4:
@@ -13,7 +13,7 @@ MAX_SIZE = sys.argv[1]
 INPUT_FILE = sys.argv[2]
 OUTPUT_FILE = sys.argv[3]
 
+sorter.logging.debug('Get parametrs : {} {} {}'.format(MAX_SIZE, INPUT_FILE, OUTPUT_FILE))
 
-def start(max_size,input_file, output_file):
-
-    pass
+sorter = sorter.Sorter(MAX_SIZE, INPUT_FILE, OUTPUT_FILE)
+sorter.shatter_file()
