@@ -1,5 +1,8 @@
+import sys
 import os
 import logging
+
+from errors import MemoryStarvationError
 
 
 logging.basicConfig(
@@ -30,8 +33,13 @@ class Sorter:
     def shatter_file(self):
         input_file_location = self.get_file_location(self, self.input_file)
         with open(input_file_location) as input_file:
+            trapped_memory_sum = 0
             for line in input_file:
-                print(line)
+                logging.debug('Handling line - {}'.format(line))
+                trapped_memory_line = sys.getsizeof(line)
+                if trapped_memory_line > self.max_size :
+                    raise MemoryStarvationError()
+
 
 
 
